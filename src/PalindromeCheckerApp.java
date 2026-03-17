@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC3: Palindrome Check Using String Reverse
+        // UC4: Character Array Based Palindrome Check
         System.out.println("======================================");
+        System.out.println("   UC4: Character Array Based Palindrome Check");
+        System.out.println("======================================");
+        uc4CheckPalindromeWithCharArray();
+        
+        // UC3: Palindrome Check Using String Reverse
+        System.out.println("\n======================================");
         System.out.println("   UC3: Palindrome Check Using String Reverse");
         System.out.println("======================================");
         uc3CheckPalindromeByReverse();
@@ -23,6 +29,47 @@ public class PalindromeCheckerApp {
         System.out.println("   UC2: Palindrome Checker");
         System.out.println("======================================");
         uc2CheckHardcodedPalindrome();
+    }
+    
+    // UC4: Character Array Based Palindrome Check using Two-Pointer Technique
+    private void uc4CheckPalindromeWithCharArray() {
+        String testString = "noon";
+        
+        // Convert string to character array
+        // Demonstrates: Array indexing and direct character access
+        char[] charArray = testString.toCharArray();
+        
+        // Two-Pointer Technique: Compare from both ends moving towards center
+        int left = 0;
+        int right = charArray.length - 1;
+        boolean isPalindrome = true;
+        
+        System.out.println("String: \"" + testString + "\"");
+        System.out.println("Character Array: ");
+        for (int i = 0; i < charArray.length; i++) {
+            System.out.print("[" + i + "]=" + charArray[i] + " ");
+        }
+        System.out.println("\n");
+        
+        // Two-pointer approach: start from beginning and end
+        System.out.println("Comparison Process using Two-Pointer Technique:");
+        while (left < right) {
+            System.out.println("Compare charArray[" + left + "]=" + charArray[left] + 
+                             " with charArray[" + right + "]=" + charArray[right]);
+            
+            if (charArray[left] != charArray[right]) {
+                isPalindrome = false;
+                break;
+            }
+            left++;
+            right--;
+        }
+        
+        if (isPalindrome) {
+            System.out.println("Result: \"" + testString + "\" is a palindrome.");
+        } else {
+            System.out.println("Result: \"" + testString + "\" is not a palindrome.");
+        }
     }
     
     // UC3: Check if a string is a palindrome by reversing using a for loop
