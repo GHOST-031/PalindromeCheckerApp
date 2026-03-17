@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC12: Strategy Pattern for Palindrome Algorithms
+        // UC13: Performance Comparison of Palindrome Algorithms
         System.out.println("======================================");
+        System.out.println("   UC13: Performance Comparison");
+        System.out.println("======================================");
+        uc13PerformanceComparison();
+        
+        // UC12: Strategy Pattern for Palindrome Algorithms
+        System.out.println("\n======================================");
         System.out.println("   UC12: Strategy Pattern for Palindrome Algorithms");
         System.out.println("======================================");
         uc12DemonstrationStrategyPattern();
@@ -403,6 +409,113 @@ public class PalindromeCheckerApp {
         } else {
             System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
         }
+    }
+    
+    // UC13: Performance Comparison of Different Palindrome Algorithms
+    private void uc13PerformanceComparison() {
+        System.out.println("Comparing Performance of Different Palindrome Algorithms");
+        System.out.println("Using System.nanoTime() to measure execution time\n");
+        
+        // Test strings of different lengths
+        String[] testStrings = {
+            "racecar",
+            "A man, a plan, a canal: Panama",
+            "Was it a car or a cat I saw?",
+            "madam",
+            "hello",
+            "abcdefghijihgfedcba",
+            "1234567890987654321"
+        };
+        
+        // Initialize strategies
+        PalindromeStrategy stackStrategy = new StackPalindromeStrategy();
+        PalindromeStrategy dequeStrategy = new DequePalindromeStrategy();
+        PalindromeStrategy twoPointerStrategy = new TwoPointerPalindromeStrategy();
+        
+        // Number of iterations for more accurate measurements
+        int iterations = 10000;
+        
+        System.out.println("Test Configuration:");
+        System.out.println("- Number of iterations: " + iterations);
+        System.out.println("- Test strings: " + testStrings.length);
+        System.out.println("\n");
+        
+        // Performance results
+        long stackTotalTime = 0;
+        long dequeTotalTime = 0;
+        long twoPointerTotalTime = 0;
+        
+        System.out.println(String.format("%-40s %-15s %-15s %-15s", 
+            "Test String", "Stack (ns)", "Deque (ns)", "TwoPointer (ns)"));
+        System.out.println("================================================================================");
+        
+        for (String testString : testStrings) {
+            // Test Stack Strategy
+            long startTime = System.nanoTime();
+            for (int i = 0; i < iterations; i++) {
+                stackStrategy.checkPalindrome(testString);
+            }
+            long stackTime = System.nanoTime() - startTime;
+            stackTotalTime += stackTime;
+            
+            // Test Deque Strategy
+            startTime = System.nanoTime();
+            for (int i = 0; i < iterations; i++) {
+                dequeStrategy.checkPalindrome(testString);
+            }
+            long dequeTime = System.nanoTime() - startTime;
+            dequeTotalTime += dequeTime;
+            
+            // Test Two-Pointer Strategy
+            startTime = System.nanoTime();
+            for (int i = 0; i < iterations; i++) {
+                twoPointerStrategy.checkPalindrome(testString);
+            }
+            long twoPointerTime = System.nanoTime() - startTime;
+            twoPointerTotalTime += twoPointerTime;
+            
+            // Display individual string results
+            String displayString = testString.length() > 37 ? 
+                testString.substring(0, 34) + "..." : testString;
+            System.out.println(String.format("%-40s %-15d %-15d %-15d",
+                displayString, stackTime, dequeTime, twoPointerTime));
+        }
+        
+        System.out.println("================================================================================");
+        
+        // Calculate averages
+        long avgStack = stackTotalTime / testStrings.length;
+        long avgDeque = dequeTotalTime / testStrings.length;
+        long avgTwoPointer = twoPointerTotalTime / testStrings.length;
+        
+        System.out.println(String.format("%-40s %-15d %-15d %-15d",
+            "AVERAGE TIME (ns)", avgStack, avgDeque, avgTwoPointer));
+        
+        System.out.println("\nPerformance Summary:");
+        System.out.println("- Stack Strategy Total Time: " + stackTotalTime + " ns");
+        System.out.println("- Deque Strategy Total Time: " + dequeTotalTime + " ns");
+        System.out.println("- Two-Pointer Strategy Total Time: " + twoPointerTotalTime + " ns");
+        
+        // Find fastest algorithm
+        long minTime = Math.min(stackTotalTime, Math.min(dequeTotalTime, twoPointerTotalTime));
+        String fastest;
+        if (minTime == stackTotalTime) {
+            fastest = "Stack Strategy";
+        } else if (minTime == dequeTotalTime) {
+            fastest = "Deque Strategy";
+        } else {
+            fastest = "Two-Pointer Strategy";
+        }
+        
+        System.out.println("\n🏆 Fastest Algorithm: " + fastest);
+        System.out.println("   (Lower execution time = better performance)");
+        
+        System.out.println("\nKey Insights:");
+        System.out.println("1. Two-Pointer approach typically fastest (direct array comparison)");
+        System.out.println("2. Stack approach has overhead from push/pop operations");
+        System.out.println("3. Deque approach adds double-ended queue complexity");
+        System.out.println("4. Real-world performance depends on input characteristics");
+        System.out.println("5. Algorithm choice affects memory usage and readability");
     }
     
     // UC12: Strategy Pattern for Palindrome Algorithms
