@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC7: Deque-Based Optimized Palindrome Checker
+        // UC8: Linked List Based Palindrome Checker
         System.out.println("======================================");
+        System.out.println("   UC8: Linked List Based Palindrome Checker");
+        System.out.println("======================================");
+        uc8CheckPalindromeWithLinkedList();
+        
+        // UC7: Deque-Based Optimized Palindrome Checker
+        System.out.println("\n======================================");
         System.out.println("   UC7: Deque-Based Optimized Palindrome Checker");
         System.out.println("======================================");
         uc7CheckPalindromeWithDeque();
@@ -300,5 +306,115 @@ public class PalindromeCheckerApp {
         // Check if string equals its reverse
         String reversed = new StringBuilder(cleaned).reverse().toString();
         return cleaned.equals(reversed);
+    }
+    
+    // UC8: Linked List Based Palindrome Checker using Fast and Slow Pointer Technique
+    private void uc8CheckPalindromeWithLinkedList() {
+        String testString = "racecar";
+        
+        System.out.println("String: \"" + testString + "\"");
+        System.out.println("\nBuilding Linked List from String:");
+        
+        // Step 1: Convert string to linked list
+        Node head = null;
+        for (char c : testString.toCharArray()) {
+            head = new Node(c, head);
+        }
+        // Reverse to get correct order (since we prepended)
+        head = reverseLinkedList(head);
+        
+        // Print linked list
+        System.out.print("Linked List: ");
+        printLinkedList(head);
+        System.out.println();
+        
+        // Step 2: Find middle using fast and slow pointer technique
+        System.out.println("\nFast and Slow Pointer Technique to find middle:");
+        Node slow = head;
+        Node fast = head;
+        
+        int step = 1;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            System.out.println("Step " + step + ": Slow at '" + (slow != null ? slow.data : "null") + 
+                             "', Fast at '" + (fast != null ? fast.data : "null") + "'");
+            step++;
+        }
+        
+        System.out.println("\nMiddle found at: '" + slow.data + "'");
+        
+        // Step 3: Reverse second half
+        System.out.println("\nReversing second half of linked list:");
+        Node secondHalf = reverseLinkedList(slow);
+        
+        // Step 4: Compare first half with reversed second half
+        System.out.println("\nComparing First Half with Reversed Second Half:");
+        Node first = head;
+        Node second = secondHalf;
+        boolean isPalindrome = true;
+        int position = 1;
+        
+        while (first != null && second != null && first != second) {
+            System.out.println("Position " + position + ": First='" + first.data + "', Second='" + 
+                             second.data + "' => " + (first.data == second.data ? "Match" : "No Match"));
+            
+            if (first.data != second.data) {
+                isPalindrome = false;
+                break;
+            }
+            first = first.next;
+            second = second.next;
+            position++;
+        }
+        
+        System.out.println("\nLinked List Advantages:");
+        System.out.println("- Dynamic memory allocation (no fixed size needed)");
+        System.out.println("- Fast and Slow pointer finds middle in O(n/2) time");
+        System.out.println("- In-place reversal: O(1) extra space for second half");
+        System.out.println("- Overall Time: O(n), Space: O(1) after list creation");
+        
+        if (isPalindrome) {
+            System.out.println("\nResult: \"" + testString + "\" is a palindrome.");
+        } else {
+            System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
+        }
+    }
+    
+    // Helper method to reverse a linked list
+    private Node reverseLinkedList(Node head) {
+        Node prev = null;
+        Node current = head;
+        
+        while (current != null) {
+            Node next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+    
+    // Helper method to print linked list
+    private void printLinkedList(Node head) {
+        System.out.print("[");
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data);
+            if (current.next != null) System.out.print(" -> ");
+            current = current.next;
+        }
+        System.out.print("]");
+    }
+    
+    // Inner class: Node for Singly Linked List
+    private static class Node {
+        char data;
+        Node next;
+        
+        Node(char data, Node next) {
+            this.data = data;
+            this.next = next;
+        }
     }
 }
