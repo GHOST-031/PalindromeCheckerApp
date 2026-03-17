@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC9: Recursive Palindrome Checker
+        // UC10: Case-Insensitive & Space-Ignored Palindrome
         System.out.println("======================================");
+        System.out.println("   UC10: Case-Insensitive & Space-Ignored Palindrome");
+        System.out.println("======================================");
+        uc10CheckCaseInsensitiveRealWorldPalindrome();
+        
+        // UC9: Recursive Palindrome Checker
+        System.out.println("\n======================================");
         System.out.println("   UC9: Recursive Palindrome Checker");
         System.out.println("======================================");
         uc9CheckPalindromeRecursive();
@@ -385,6 +391,67 @@ public class PalindromeCheckerApp {
         } else {
             System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
         }
+    }
+    
+    // UC10: Case-Insensitive & Space-Ignored Palindrome Checker
+    private void uc10CheckCaseInsensitiveRealWorldPalindrome() {
+        // Test cases with mixed case and spaces (real-world examples)
+        String[] testStrings = {
+            "A man, a plan, a canal: Panama",
+            "race a car",
+            "Was it a car or a cat I saw?",
+            "Madam, I'm Adam"
+        };
+        
+        System.out.println("Testing real-world palindromes with spaces and mixed case:\n");
+        
+        for (String testString : testStrings) {
+            System.out.println("Original String: \"" + testString + "\"");
+            
+            // Step 1: String Preprocessing - Remove spaces and convert to lowercase
+            String preprocessed = preprocessString(testString);
+            System.out.println("After preprocessing: \"" + preprocessed + "\"");
+            
+            // Step 2: Check if palindrome
+            boolean isPalindrome = checkIfPalindrome(preprocessed);
+            
+            // Step 3: Display result
+            if (isPalindrome) {
+                System.out.println("Result: Palindrome OK\n");
+            } else {
+                System.out.println("Result: Not a palindrome X\n");
+            }
+        }
+        
+        System.out.println("UC10 Preprocessing Explanation:");
+        System.out.println("- Regular Expression: Removes all non-alphanumeric characters");
+        System.out.println("- toLowerCase(): Converts all characters to lowercase");
+        System.out.println("- Handles real-world text with punctuation and spaces");
+        System.out.println("- Makes palindrome checking more practical and flexible");
+    }
+    
+    // Helper method: Preprocess string for palindrome checking
+    // Removes all non-alphanumeric characters and converts to lowercase
+    private String preprocessString(String str) {
+        // Regular Expression: [^a-zA-Z0-9] means \"any character that is NOT alphanumeric\"
+        // replaceAll() replaces all non-alphanumeric characters with empty string
+        String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        return cleaned;
+    }
+    
+    // Helper method: Check if a string is a palindrome (simple comparison)
+    private boolean checkIfPalindrome(String str) {
+        int left = 0;
+        int right = str.length() - 1;
+        
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
     
     // UC9: Recursive Palindrome Checker using Call Stack
