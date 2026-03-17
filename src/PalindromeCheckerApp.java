@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC4: Character Array Based Palindrome Check
+        // UC5: Stack-Based Palindrome Checker
         System.out.println("======================================");
+        System.out.println("   UC5: Stack-Based Palindrome Checker");
+        System.out.println("======================================");
+        uc5CheckPalindromeWithStack();
+        
+        // UC4: Character Array Based Palindrome Check
+        System.out.println("\n======================================");
         System.out.println("   UC4: Character Array Based Palindrome Check");
         System.out.println("======================================");
         uc4CheckPalindromeWithCharArray();
@@ -29,6 +35,50 @@ public class PalindromeCheckerApp {
         System.out.println("   UC2: Palindrome Checker");
         System.out.println("======================================");
         uc2CheckHardcodedPalindrome();
+    }
+    
+    // UC5: Stack-Based Palindrome Checker using LIFO principle
+    private void uc5CheckPalindromeWithStack() {
+        String testString = "level";
+        
+        // Create a stack to store characters
+        // Stack demonstrates LIFO (Last In First Out) principle
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+        
+        System.out.println("String: \"" + testString + "\"");
+        System.out.println("\nPush Operation - Adding characters to stack:");
+        
+        // Push Operation: Insert each character into the stack
+        for (int i = 0; i < testString.length(); i++) {
+            char c = testString.charAt(i);
+            stack.push(c);
+            System.out.println("Push: " + c + " (Stack size: " + stack.size() + ")");
+        }
+        
+        // Build reversed string by popping from stack
+        System.out.println("\nPop Operation - Removing characters from stack (reversed order):");
+        String reversedString = "";
+        int popCount = 0;
+        
+        while (!stack.isEmpty()) {
+            // Pop Operation: Remove characters from stack in reverse order
+            char c = stack.pop();
+            reversedString = reversedString + c;
+            popCount++;
+            System.out.println("Pop: " + c + " (Stack size: " + stack.size() + ")");
+        }
+        
+        // Compare original and reversed string
+        boolean isPalindrome = testString.equals(reversedString);
+        
+        System.out.println("\nOriginal String: \"" + testString + "\"");
+        System.out.println("Reversed String: \"" + reversedString + "\"");
+        
+        if (isPalindrome) {
+            System.out.println("Result: \"" + testString + "\" is a palindrome.");
+        } else {
+            System.out.println("Result: \"" + testString + "\" is not a palindrome.");
+        }
     }
     
     // UC4: Character Array Based Palindrome Check using Two-Pointer Technique
