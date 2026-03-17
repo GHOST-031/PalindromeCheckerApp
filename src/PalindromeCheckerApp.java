@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC11: Object-Oriented Palindrome Service
+        // UC12: Strategy Pattern for Palindrome Algorithms
         System.out.println("======================================");
+        System.out.println("   UC12: Strategy Pattern for Palindrome Algorithms");
+        System.out.println("======================================");
+        uc12DemonstrationStrategyPattern();
+        
+        // UC11: Object-Oriented Palindrome Service
+        System.out.println("\n======================================");
         System.out.println("   UC11: Object-Oriented Palindrome Service");
         System.out.println("======================================");
         uc11CheckWithOOPService();
@@ -399,6 +405,57 @@ public class PalindromeCheckerApp {
         }
     }
     
+    // UC12: Strategy Pattern for Palindrome Algorithms
+    private void uc12DemonstrationStrategyPattern() {
+        String testString = "racecar";
+        
+        System.out.println("Demonstrating Strategy Pattern with Different Algorithms:\n");
+        System.out.println("Test String: \"" + testString + "\"\n");
+        
+        // Strategy 1: Stack-based approach
+        System.out.println("Strategy 1: Stack-Based Algorithm");
+        PalindromeStrategy stackStrategy = new StackPalindromeStrategy();
+        boolean result1 = stackStrategy.checkPalindrome(testString);
+        System.out.println("Result: " + (result1 ? "Palindrome" : "Not palindrome"));
+        System.out.println("Data Structure: Stack (LIFO)\n");
+        
+        // Strategy 2: Deque-based approach
+        System.out.println("Strategy 2: Deque-Based Algorithm");
+        PalindromeStrategy dequeStrategy = new DequePalindromeStrategy();
+        boolean result2 = dequeStrategy.checkPalindrome(testString);
+        System.out.println("Result: " + (result2 ? "Palindrome" : "Not palindrome"));
+        System.out.println("Data Structure: Deque (Double-ended queue)\n");
+        
+        // Strategy 3: Two-pointer array approach
+        System.out.println("Strategy 3: Two-Pointer Array Algorithm");
+        PalindromeStrategy twoPointerStrategy = new TwoPointerPalindromeStrategy();
+        boolean result3 = twoPointerStrategy.checkPalindrome(testString);
+        System.out.println("Result: " + (result3 ? "Palindrome" : "Not palindrome"));
+        System.out.println("Data Structure: Character Array\n");
+        
+        // Demonstrate polymorphism: using different strategies dynamically
+        System.out.println("Polymorphic Behavior - Testing with all strategies:\n");
+        System.out.println("String | Stack | Deque | TwoPointer");
+        System.out.println("-------|-------|-------|----------");
+        
+        String[] testCases = {"level", "hello", "noon", "world", "Madam"};
+        for (String str : testCases) {
+            boolean s = stackStrategy.checkPalindrome(str);
+            boolean d = dequeStrategy.checkPalindrome(str);
+            boolean t = twoPointerStrategy.checkPalindrome(str);
+            System.out.println(String.format("%-6s| %-5s | %-5s | %-8s", 
+                str, (s ? "Yes" : "No"), (d ? "Yes" : "No"), (t ? "Yes" : "No")));
+        }
+        
+        System.out.println("\nStrategy Pattern Benefits:");
+        System.out.println("1. Encapsulation: Each algorithm encapsulated in separate class");
+        System.out.println("2. Polymorphism: All strategies implement same interface");
+        System.out.println("3. Runtime Selection: Choose algorithm dynamically");
+        System.out.println("4. Easy Exchange: Switch strategies without changing client code");
+        System.out.println("5. Maintainability: Add new strategies without modifying existing code");
+        System.out.println("6. Testability: Each strategy can be tested independently");
+    }
+    
     // UC11: Object-Oriented Palindrome Service
     private void uc11CheckWithOOPService() {
         // Test cases for OOP-based palindrome checking
@@ -609,6 +666,76 @@ public class PalindromeCheckerApp {
         Node(char data, Node next) {
             this.data = data;
             this.next = next;
+        }
+    }
+    
+    // UC12: Strategy Pattern - Interface for different palindrome algorithms
+    private interface PalindromeStrategy {
+        boolean checkPalindrome(String str);
+    }
+    
+    // UC12: Concrete Strategy 1 - Stack-based approach
+    private static class StackPalindromeStrategy implements PalindromeStrategy {
+        public boolean checkPalindrome(String str) {
+            if (str == null || str.length() == 0) return false;
+            String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+            
+            java.util.Stack<Character> stack = new java.util.Stack<>();
+            int mid = cleaned.length() / 2;
+            
+            // Push first half to stack
+            for (int i = 0; i < mid; i++) {
+                stack.push(cleaned.charAt(i));
+            }
+            
+            // Skip middle character if odd length
+            int startIdx = (cleaned.length() % 2 == 0) ? mid : mid + 1;
+            
+            // Pop and compare with second half
+            for (int i = startIdx; i < cleaned.length(); i++) {
+                if (stack.isEmpty() || stack.pop() != cleaned.charAt(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+    
+    // UC12: Concrete Strategy 2 - Deque-based approach
+    private static class DequePalindromeStrategy implements PalindromeStrategy {
+        public boolean checkPalindrome(String str) {
+            if (str == null || str.length() == 0) return false;
+            String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+            
+            java.util.Deque<Character> deque = new java.util.LinkedList<>();
+            for (char c : cleaned.toCharArray()) {
+                deque.addLast(c);
+            }
+            
+            while (deque.size() > 1) {
+                if (deque.removeFirst() != deque.removeLast()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+    
+    // UC12: Concrete Strategy 3 - Two-pointer array approach
+    private static class TwoPointerPalindromeStrategy implements PalindromeStrategy {
+        public boolean checkPalindrome(String str) {
+            if (str == null || str.length() == 0) return false;
+            String cleaned = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+            
+            int left = 0, right = cleaned.length() - 1;
+            while (left < right) {
+                if (cleaned.charAt(left) != cleaned.charAt(right)) {
+                    return false;
+                }
+                left++;
+                right--;
+            }
+            return true;
         }
     }
     
