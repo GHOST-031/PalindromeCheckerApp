@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC6: Queue + Stack Based Palindrome Check
+        // UC7: Deque-Based Optimized Palindrome Checker
         System.out.println("======================================");
+        System.out.println("   UC7: Deque-Based Optimized Palindrome Checker");
+        System.out.println("======================================");
+        uc7CheckPalindromeWithDeque();
+        
+        // UC6: Queue + Stack Based Palindrome Check
+        System.out.println("\n======================================");
         System.out.println("   UC6: Queue + Stack Based Palindrome Check");
         System.out.println("======================================");
         uc6CheckPalindromeWithQueueStack();
@@ -41,6 +47,69 @@ public class PalindromeCheckerApp {
         System.out.println("   UC2: Palindrome Checker");
         System.out.println("======================================");
         uc2CheckHardcodedPalindrome();
+    }
+    
+    // UC7: Deque-Based Optimized Palindrome Checker
+    private void uc7CheckPalindromeWithDeque() {
+        String testString = "madam";
+        
+        // Create a Deque (Double Ended Queue) - allows insertion/deletion from both ends
+        // Deque can be accessed from front and rear simultaneously
+        java.util.Deque<Character> deque = new java.util.LinkedList<>();
+        
+        System.out.println("String: \"" + testString + "\"");
+        System.out.println("\nInserting characters into Deque (both ends accessible):");
+        
+        // Insert all characters into the deque
+        for (int i = 0; i < testString.length(); i++) {
+            char c = testString.charAt(i);
+            deque.addLast(c);  // Add to rear
+            System.out.println("Add: " + c + " (Deque size: " + deque.size() + ")");
+        }
+        
+        System.out.println("\nCharacter Deque Contents: " + deque);
+        System.out.println("\nComparing First and Last Characters (moving towards center):");
+        System.out.println("Position | First (removeFront) | Last (removeLast) | Match?");
+        System.out.println("---------|---------------------|------------------|-------");
+        
+        boolean isPalindrome = true;
+        int position = 1;
+        
+        // Compare front and rear elements
+        // removeFirst() gets from front, removeLast() gets from rear
+        while (deque.size() >= 1) {
+            if (deque.size() == 1) {
+                // Single character in middle - always matches
+                char single = deque.removeFirst();
+                System.out.println("   " + position + "    |         " + single + "          |        " + single + "         | Yes (Middle)");
+                break;
+            } else if (deque.size() >= 2) {
+                // Remove from front and rear
+                char fromFront = deque.removeFirst();   // Get first element
+                char fromRear = deque.removeLast();     // Get last element
+                
+                boolean matches = (fromFront == fromRear);
+                System.out.println("   " + position + "    |         " + fromFront + "          |        " + fromRear + "         | " + (matches ? "Yes" : "No"));
+                
+                if (!matches) {
+                    isPalindrome = false;
+                    break;
+                }
+                position++;
+            }
+        }
+        
+        System.out.println("\nDeque Advantage:");
+        System.out.println("- Enables direct access to both front and rear elements");
+        System.out.println("- No need for separate data structures (no Queue + Stack required)");
+        System.out.println("- Optimized: O(n/2) comparisons with minimal overhead");
+        System.out.println("- Eliminates intermediate data structures and copies");
+        
+        if (isPalindrome) {
+            System.out.println("\nResult: \"" + testString + "\" is a palindrome.");
+        } else {
+            System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
+        }
     }
     
     // UC6: Queue + Stack Based Palindrome Check - Demonstrates FIFO vs LIFO
