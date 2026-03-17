@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC10: Case-Insensitive & Space-Ignored Palindrome
+        // UC11: Object-Oriented Palindrome Service
         System.out.println("======================================");
+        System.out.println("   UC11: Object-Oriented Palindrome Service");
+        System.out.println("======================================");
+        uc11CheckWithOOPService();
+        
+        // UC10: Case-Insensitive & Space-Ignored Palindrome
+        System.out.println("\n======================================");
         System.out.println("   UC10: Case-Insensitive & Space-Ignored Palindrome");
         System.out.println("======================================");
         uc10CheckCaseInsensitiveRealWorldPalindrome();
@@ -393,6 +399,45 @@ public class PalindromeCheckerApp {
         }
     }
     
+    // UC11: Object-Oriented Palindrome Service
+    private void uc11CheckWithOOPService() {
+        // Test cases for OOP-based palindrome checking
+        String[] testStrings = {"hello", "racecar", "Madam", "palindrome", "Anna"};
+        
+        System.out.println("Demonstrating Object-Oriented Encapsulation:\n");
+        System.out.println("Creating PalindromeChecker service object...\n");
+        
+        // Create instance of PalindromeChecker service class
+        PalindromeChecker checker = new PalindromeChecker();
+        
+        System.out.println("Service: PalindromeChecker");
+        System.out.println("Public Method: checkPalindrome(String)");
+        System.out.println("Returns: boolean\n");
+        
+        System.out.println("Testing multiple strings using single service:\n");
+        
+        for (String str : testStrings) {
+            // Single method encapsulates all palindrome logic
+            boolean result = checker.checkPalindrome(str);
+            String output = result ? "✓ Palindrome" : "✗ Not palindrome";
+            System.out.println("\"" + str + "\" => " + output);
+        }
+        
+        System.out.println("\nOOP Principles Demonstrated:");
+        System.out.println("1. Encapsulation:");
+        System.out.println("   - Internal logic hidden in PalindromeChecker class");
+        System.out.println("   - Only public checkPalindrome() method exposed");
+        System.out.println("   - Preprocessing and comparison logic abstracted away");
+        System.out.println("\n2. Single Responsibility Principle:");
+        System.out.println("   - PalindromeChecker has ONE responsibility");
+        System.out.println("   - Check if a string is a palindrome");
+        System.out.println("   - All related logic centralized in one place");
+        System.out.println("\n3. Reusability:");
+        System.out.println("   - Same PalindromeChecker instance used multiple times");
+        System.out.println("   - Can be instantiated and used anywhere in code");
+        System.out.println("   - Easy to maintain and test in isolation");
+    }
+    
     // UC10: Case-Insensitive & Space-Ignored Palindrome Checker
     private void uc10CheckCaseInsensitiveRealWorldPalindrome() {
         // Test cases with mixed case and spaces (real-world examples)
@@ -564,6 +609,69 @@ public class PalindromeCheckerApp {
         Node(char data, Node next) {
             this.data = data;
             this.next = next;
+        }
+    }
+    
+    // UC11: Inner class for OOP-based Palindrome Service
+    // Demonstrates Encapsulation and Single Responsibility Principle
+    private static class PalindromeChecker {
+        
+        // Private: Internal data structure (Stack to demonstrate OOPS)
+        private java.util.Stack<Character> charStack;
+        
+        // Constructor: Initialize the service
+        public PalindromeChecker() {
+            this.charStack = new java.util.Stack<>();
+        }
+        
+        // Public API: Single method exposed to users
+        // Encapsulates all internal logic for palindrome checking
+        public boolean checkPalindrome(String input) {
+            // Validate input
+            if (input == null || input.isEmpty()) {
+                return false;
+            }
+            
+            // Preprocess: Remove non-alphanumeric and convert to lowercase
+            String cleaned = preprocessInput(input);
+            
+            // Check palindrome using internal logic
+            return isPalindrome(cleaned);
+        }
+        
+        // Private: Internal method - not exposed to public
+        private String preprocessInput(String str) {
+            return str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        }
+        
+        // Private: Internal method - checks using Stack (LIFO property)
+        private boolean isPalindrome(String str) {
+            if (str.length() == 0) {
+                return false;
+            }
+            
+            // Clear stack before using
+            charStack.clear();
+            
+            // Push first half characters to stack
+            int len = str.length();
+            int mid = len / 2;
+            
+            for (int i = 0; i < mid; i++) {
+                charStack.push(str.charAt(i));
+            }
+            
+            // Skip middle character if odd length
+            int secondHalfStart = (len % 2 == 0) ? mid : mid + 1;
+            
+            // Pop from stack and compare with second half
+            for (int i = secondHalfStart; i < len; i++) {
+                if (charStack.isEmpty() || charStack.pop() != str.charAt(i)) {
+                    return false;
+                }
+            }
+            
+            return true;
         }
     }
 }
