@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC5: Stack-Based Palindrome Checker
+        // UC6: Queue + Stack Based Palindrome Check
         System.out.println("======================================");
+        System.out.println("   UC6: Queue + Stack Based Palindrome Check");
+        System.out.println("======================================");
+        uc6CheckPalindromeWithQueueStack();
+        
+        // UC5: Stack-Based Palindrome Checker
+        System.out.println("\n======================================");
         System.out.println("   UC5: Stack-Based Palindrome Checker");
         System.out.println("======================================");
         uc5CheckPalindromeWithStack();
@@ -35,6 +41,61 @@ public class PalindromeCheckerApp {
         System.out.println("   UC2: Palindrome Checker");
         System.out.println("======================================");
         uc2CheckHardcodedPalindrome();
+    }
+    
+    // UC6: Queue + Stack Based Palindrome Check - Demonstrates FIFO vs LIFO
+    private void uc6CheckPalindromeWithQueueStack() {
+        String testString = "radar";
+        
+        // Create a Queue (FIFO - First In First Out) 
+        java.util.Queue<Character> queue = new java.util.LinkedList<>();
+        
+        // Create a Stack (LIFO - Last In First Out)
+        java.util.Stack<Character> stack = new java.util.Stack<>();
+        
+        System.out.println("String: \"" + testString + "\"");
+        System.out.println("\nEnqueue/Push Operation - Adding characters to Queue and Stack:");
+        
+        // Enqueue all characters to queue and push to stack
+        for (int i = 0; i < testString.length(); i++) {
+            char c = testString.charAt(i);
+            queue.offer(c);  // Enqueue to queue
+            stack.push(c);   // Push to stack
+            System.out.println("Enqueue/Push: " + c + " | Queue size: " + queue.size() + " | Stack size: " + stack.size());
+        }
+        
+        // Dequeue from queue (FIFO - gets characters in original order)
+        // Pop from stack (LIFO - gets characters in reverse order)
+        System.out.println("\nDequeue/Pop Operation - Comparing FIFO vs LIFO:");
+        System.out.println("Position | Queue (FIFO) | Stack (LIFO) | Match?");
+        System.out.println("---------|--------------|--------------|-------");
+        
+        boolean isPalindrome = true;
+        int position = 1;
+        
+        while (!queue.isEmpty() && !stack.isEmpty()) {
+            char fromQueue = queue.poll();   // Dequeue (FIFO - next is first that was added)
+            char fromStack = stack.pop();     // Pop (LIFO - next is last that was added)
+            
+            boolean matches = (fromQueue == fromStack);
+            System.out.println("   " + position + "    |      " + fromQueue + "        |      " + fromStack + "       | " + (matches ? "Yes" : "No"));
+            
+            if (!matches) {
+                isPalindrome = false;
+            }
+            position++;
+        }
+        
+        System.out.println("\nDetailed Explanation:");
+        System.out.println("- Queue (FIFO): Returns characters in the order they were added (original order)");
+        System.out.println("- Stack (LIFO): Returns characters in reverse order (last added comes out first)");
+        System.out.println("- If Queue and Stack outputs match at each position, the string is a palindrome");
+        
+        if (isPalindrome) {
+            System.out.println("\nResult: \"" + testString + "\" is a palindrome.");
+        } else {
+            System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
+        }
     }
     
     // UC5: Stack-Based Palindrome Checker using LIFO principle
