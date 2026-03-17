@@ -6,8 +6,14 @@ public class PalindromeCheckerApp {
     }
     
     public void run() {
-        // UC8: Linked List Based Palindrome Checker
+        // UC9: Recursive Palindrome Checker
         System.out.println("======================================");
+        System.out.println("   UC9: Recursive Palindrome Checker");
+        System.out.println("======================================");
+        uc9CheckPalindromeRecursive();
+        
+        // UC8: Linked List Based Palindrome Checker
+        System.out.println("\n======================================");
         System.out.println("   UC8: Linked List Based Palindrome Checker");
         System.out.println("======================================");
         uc8CheckPalindromeWithLinkedList();
@@ -379,6 +385,82 @@ public class PalindromeCheckerApp {
         } else {
             System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
         }
+    }
+    
+    // UC9: Recursive Palindrome Checker using Call Stack
+    private void uc9CheckPalindromeRecursive() {
+        String testString = "rotator";
+        
+        System.out.println("String: \"" + testString + "\"");
+        System.out.println("\nRecursive Approach using Call Stack:");
+        System.out.println("Converting string to character array for recursive comparison...");
+        
+        char[] chars = testString.toCharArray();
+        
+        // Display the array
+        System.out.print("Character Array: [");
+        for (int i = 0; i < chars.length; i++) {
+            System.out.print("[" + i + "]=" + chars[i]);
+            if (i < chars.length - 1) System.out.print(", ");
+        }
+        System.out.println("]");
+        
+        // Enable tracing for recursive calls
+        System.out.println("\nRecursive Call Trace:");
+        callDepth = 0;  // Initialize call depth
+        
+        boolean isPalindrome = isPalindromeRecursive(chars, 0, chars.length - 1);
+        
+        System.out.println("\nRecursion Explanation:");
+        System.out.println("- Each recursive call compares characters from opposite ends");
+        System.out.println("- Base condition: when left >= right, recursion stops (all chars matched)");
+        System.out.println("- Call Stack grows with each recursive call");
+        System.out.println("- Call Stack shrinks as each recursive call returns");
+        System.out.println("- Time Complexity: O(n/2) comparisons");
+        System.out.println("- Space Complexity: O(n/2) for call stack depth in worst case");
+        
+        if (isPalindrome) {
+            System.out.println("\nResult: \"" + testString + "\" is a palindrome.");
+        } else {
+            System.out.println("\nResult: \"" + testString + "\" is not a palindrome.");
+        }
+    }
+    
+    private int callDepth = 0;  // Track recursion depth for tracing
+    
+    // Recursive method to check palindrome
+    // Left pointer starts from beginning, Right pointer starts from end
+    private boolean isPalindromeRecursive(char[] chars, int left, int right) {
+        String indent = "  ".repeat(callDepth);  // For visual indentation
+        
+        // Display current recursive call
+        System.out.println(indent + "Call " + (callDepth + 1) + ": left=" + left + ", right=" + right + 
+                         " => Compare '" + chars[left] + "' with '" + chars[right] + "'");
+        
+        callDepth++;
+        
+        // Base Condition: When pointers meet or cross, we've compared all relevant pairs
+        if (left >= right) {
+            callDepth--;
+            System.out.println(indent + "  => Base condition met (left >= right). Palindrome confirmed!");
+            return true;
+        }
+        
+        // If characters don't match, it's not a palindrome
+        if (chars[left] != chars[right]) {
+            callDepth--;
+            System.out.println(indent + "  => Mismatch! '" + chars[left] + "' != '" + chars[right] + "'. Not a palindrome.");
+            return false;
+        }
+        
+        // Characters match, move pointers towards center
+        System.out.println(indent + "  => Match! '" + chars[left] + "' == '" + chars[right] + "'. Moving inward...");
+        
+        // Recursive call to check the remaining substring
+        boolean result = isPalindromeRecursive(chars, left + 1, right - 1);
+        
+        callDepth--;
+        return result;
     }
     
     // Helper method to reverse a linked list
